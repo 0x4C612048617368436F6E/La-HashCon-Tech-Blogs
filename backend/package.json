@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "start": "node ./build/server.js",
-    "dev": "nodemon ./build/server.js"
+    "start": "node ./build/src/server.js",
+    "dev": "nodemon ./build/src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -17,6 +17,8 @@
     "typescript": "^5.7.2"
   },
   "dependencies": {
-    "express": "^4.21.2"
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongodb": "^6.12.0"
   }
 }
