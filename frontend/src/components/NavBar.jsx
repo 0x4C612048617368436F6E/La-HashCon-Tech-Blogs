@@ -43,6 +43,9 @@ const NavBar = ()=>{
 			</ul>
 		</div>
 		<div class="order-2 md:order-3 flex">
+
+
+
 			  <Link to="Login">
         <button class="px-4 py-2 bg-black hover:text-black hover:bg-white text-white rounded-xl flex items-center gap-2 mr-5 duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                 <span>Login</span>

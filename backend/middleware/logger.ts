@@ -73,6 +73,46 @@ export default class Logger{
         next();
     }
 
+    async logError(err:any,req:any,res:any,next:any){
+        if(err){
+            //check the type of status we get
+            let status:number = res.statusCode;
+            let HTTPMethod = req.method;
+            let origin = req.get('host'); //i.e. from whihc origin
+            let originAgain = req.hostname;
+            let route = req.path;
+            let HTTPVersion = req.httpVersion; //The HTTP version
+            let protocol = req.protocol;
+            let PORT = req.socket.localPort;
+            let Device = req.device
+            let IPAddress = req.ip
+
+            //construct final string
+            const FinalString:string = origin +" " + originAgain + " " + protocol +"-- ["+this.date.toString().slice(0,29)+"] " +"\""+HTTPMethod+route+HTTPVersion+status+PORT+"\"-\""+Device+IPAddress+"\n";
+            //write to file
+            if(existsSync(this.LogDirectory)){
+                //file already exists
+                //Append the message to the file
+                try{
+                    await fs.promises.appendFile(this.LogPathServer,FinalString);
+                }catch(err){
+                    console.log("Error occured: ",err);
+            }
+            }else{
+                //file does not exists
+                //make directory and create new file and write the message to it
+                try{
+                    fs.promises.mkdir(this.LogDirectory);
+                    fs.promises.writeFile(this.LogPathServer,FinalString);
+                }catch(err){
+                    console.log("Error occured: ",err);
+                }
+            }
+
+            next();
+        }
+    }
+
     async logDatabase(message:any){
         //Just to log Database access
         //write to file

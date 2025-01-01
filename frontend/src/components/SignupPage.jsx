@@ -1,8 +1,10 @@
-import Logo from '../assets/Logo.png';
+import Video from '../assets/204565-924698132_small.mp4';
 import Google from '../assets/google.png';
 import Github from '../assets/github.png';
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import visible from '../assets/visible.png';
+import invisible from '../assets/hidden.png';
 
 const SignupPage = () =>{
     let [IsFullNameLeftBlank,setIsFullNameLeftBlank] = useState(false);
@@ -18,6 +20,7 @@ const SignupPage = () =>{
 
     let [Password,setPassword] = useState(''); //for Password input
     let [PasswordIsNotValid,setPasswordIsNotValid] = useState('');
+    let [seePassword,setSeePassword] = useState(false);
 
     const handleSignUpPageSubmit = (e)=>{
         e.preventDefault();
@@ -97,6 +100,12 @@ const SignupPage = () =>{
         //console.log(`Password: ${FullName}`);
     }
 
+    const showPassword = ()=>{
+        //when OnClick is activated, we show/unshow the password
+        console.log("Show/Unshow Password");
+        setSeePassword((prev)=>!prev);
+    }
+
     return(
 <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
     <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
@@ -126,6 +135,17 @@ const SignupPage = () =>{
                                 Sign Up with GitHub
                             </span>
                         </button>
+
+
+                        <button
+                            className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-indigo-100 text-gray-800 flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5">
+                            <div className="p-1 rounded-full">
+                                <img src={Github} className='w-5'/>
+                            </div>
+                            <span className="ml-4">
+                                Sign Up with Discord
+                            </span>
+                        </button>
                     </div>
 
                     <div className="my-12 border-b text-center">
@@ -144,10 +164,13 @@ const SignupPage = () =>{
                             className="w-full px-8 py-4 mt-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white"
                             type="email" placeholder="Email" value={Email} onChange={(e)=>{setEmail(()=>e.target.value)}}/>
                             {IsEmailLeftBlank && <p className='text-red-600'>Field can not be left empty</p> || EmailIsNotValid && <p className='text-red-600'>Email is not Valid</p> || <p></p>}
+                        <div className='relative'>
                         <input
                             className="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5"
-                            type="password" placeholder="Password" value={Password} onChange={(e)=>{setPassword(()=>e.target.value)}}/>
-                            {IsPasswordLeftBlank && <p className='text-red-600'>Field can not be left empty</p> || PasswordIsNotValid && <p className='text-red-600'>Password must contain a minimum of 8 characters, at least one uppercase English letter, at least one lowercase English letter, at least one digit,and at least one special character</p> || <p></p>}
+                            type={seePassword ? "text" : "password"} placeholder="Password" value={Password} onChange={(e)=>{setPassword(()=>e.target.value)}}/>
+                            <img src={seePassword ? visible : invisible} className='w-5 absolute right-5 top-10 cursor-pointer' onClick={()=>showPassword()}/>
+                        </div>
+                            {IsPasswordLeftBlank && <p className='text-red-600'>Field can not be left empty</p> || PasswordIsNotValid && <p classNameA='text-red-600'>Password must contain a minimum of 8 characters, at least one uppercase English letter, at least one lowercase English letter, at least one digit,and at least one special character</p> || <p></p>}
 
                         <button
                             className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-black hover:bg-white hover:text-black text-white flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5">
@@ -167,7 +190,9 @@ const SignupPage = () =>{
         </div>
         <div className="flex-1 bg-white text-center hidden lg:flex">
             <div className="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat">
-                <img src={Logo} alt='Logo'/>
+                <video autoPlay muted loop className='w-full h-full'>
+                    <source src={Video} type="video/mp4"/>
+                </video>
             </div>
         </div>
     </div>
