@@ -1,11 +1,11 @@
 import Logo from '../assets/Logo.png';
 import Google from '../assets/google.png';
 import Github from '../assets/github.png';
+import { Link } from 'react-router-dom';
 
 const LoginPage = ()=>{
     return(
         <>
-        
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
         <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
             <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
@@ -58,14 +58,8 @@ const LoginPage = ()=>{
                                 </span>
                             </button>
                             <p className="mt-6 text-xs text-gray-600 text-center">
-                                I agree to abide by templatana's
-                                <a href="#" className="border-b border-gray-500 border-dotted">
-                                    Terms of Service
-                                </a>
-                                and its
-                                <a href="#" className="border-b border-gray-500 border-dotted">
-                                    Privacy Policy
-                                </a>
+                                No account?
+                                    <Link to="/Signup" className="border-b border-gray-500 border-dotted ml-2">SignUp</Link>
                             </p>
                         </div>
                     </div>

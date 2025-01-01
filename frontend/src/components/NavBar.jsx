@@ -6,7 +6,7 @@ import { motion,AnimatePresence } from 'framer-motion';
 const NavBar = ()=>{
     return(
         <>
-        <AnimatePresence>
+         <AnimatePresence>
         <motion.div
         initial={{ opacity:0 }}
         animate={{ opacity:1 }}
@@ -43,16 +43,18 @@ const NavBar = ()=>{
 			</ul>
 		</div>
 		<div class="order-2 md:order-3 flex">
-			<button class="px-4 py-2 bg-black hover:text-black hover:bg-white text-white rounded-xl flex items-center gap-2 mr-5 duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
+			  <Link to="Login">
+        <button class="px-4 py-2 bg-black hover:text-black hover:bg-white text-white rounded-xl flex items-center gap-2 mr-5 duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
                 <span>Login</span>
             </button>
+            </Link>
 		</div>
 	</div>
 </nav>
-
-        <Outlet />
-        </motion.div>
-        </AnimatePresence>
+<Outlet />
+</motion.div>
+</AnimatePresence>
+        
         </>
         
     )
