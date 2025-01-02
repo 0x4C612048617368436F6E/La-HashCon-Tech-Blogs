@@ -11,17 +11,39 @@ enum REPSONSESTATUSCODE{
 }
 
 export default class Logger{
-    private readonly date: Date;
-    private readonly LogDirectory = path.join(__dirname,"..","..","Logger");
-    private readonly LogPathServer:string = path.join(__dirname,"..","..","Logger","serverlog.log");
-    private readonly LogPathDatbase = path.join(__dirname,"..","..","Logger","databaselog.log");
-    public constructor(){
-        //here just construct the date
-        this.date = new Date();
-        //const Cdate:string = date.toString().slice(0,-29);
+
+    async logMessageForServer(message:string){
+        let date = new Date().toISOString();
+        let LogDirectory = path.join(__dirname,"..","..","Logger");
+        let LogPathServer = path.join(__dirname,"..","..","Logger","serverlog.log");
+        let LogPathDatabase = path.join(__dirname,"..","..","Logger","databaselog.log");
+        //write to file
+        const FinalString = (date ?? new Date().toISOString()) + " "+ message +"\n";
+        if(existsSync((LogDirectory ?? path.join(__dirname,"..","..","Logger")))){
+            //file already exists
+            //Append the message to the file
+            try{
+                await fs.promises.appendFile((LogPathServer ?? path.join(__dirname,"..","..","Logger","serverlog.log")),FinalString);
+            }catch(err){
+                console.log("Error occured: ",err);
+            }
+        }else{
+            //file does not exists
+            //make directory and create new file and write the message to it
+            try{
+                fs.promises.mkdir((LogDirectory ?? path.join(__dirname,"..","..","Logger")));
+                fs.promises.writeFile((LogPathServer ?? path.join(__dirname,"..","..","Logger","serverlog.log")),FinalString);
+            }catch(err){
+                console.log("Error occured: ",err);
+            }
+        }
     }
 
     async logMessage(req:any,res:any,next:any){
+        let date = new Date().toISOString();
+        let LogDirectory = path.join(__dirname,"..","..","Logger");
+        let LogPathServer = path.join(__dirname,"..","..","Logger","serverlog.log");
+        let LogPathDatabase = path.join(__dirname,"..","..","Logger","databaselog.log");
         //check the type of status we get
         let status:number = res.statusCode;
         let HTTPMethod = req.method;
@@ -49,13 +71,13 @@ export default class Logger{
         }
 
         //construct final string
-        const FinalString:string = origin +" " + originAgain + " " + protocol +"-- ["+this.date.toString().slice(0,29)+"] " +"\""+HTTPMethod+route+HTTPVersion+status+PORT+"\"-\""+Device+IPAddress+"\n";
+        const FinalString:string = origin +" " + " " + originAgain + " " + protocol +" -- ["+(date ?? (date ?? new Date().toISOString()) +"\n")+"] " +"\""+ " " + HTTPMethod + " " + route + " " + HTTPVersion + " "+status + " " +PORT + " \" - "+Device+IPAddress+"\n";
         //write to file
-        if(existsSync(this.LogDirectory)){
+        if(existsSync((LogDirectory ?? path.join(__dirname,"..","..","Logger")))){
             //file already exists
             //Append the message to the file
             try{
-                await fs.promises.appendFile(this.LogPathServer,FinalString);
+                await fs.promises.appendFile((LogPathServer ?? path.join(__dirname,"..","..","Logger","serverlog.log")),FinalString);
             }catch(err){
                 console.log("Error occured: ",err);
             }
@@ -63,8 +85,8 @@ export default class Logger{
             //file does not exists
             //make directory and create new file and write the message to it
             try{
-                fs.promises.mkdir(this.LogDirectory);
-                fs.promises.writeFile(this.LogPathServer,FinalString);
+                fs.promises.mkdir((LogDirectory ?? path.join(__dirname,"..","..","Logger")));
+                fs.promises.writeFile((LogPathServer ?? path.join(__dirname,"..","..","Logger","serverlog.log")),FinalString);
             }catch(err){
                 console.log("Error occured: ",err);
             }
@@ -74,6 +96,10 @@ export default class Logger{
     }
 
     async logError(err:any,req:any,res:any,next:any){
+        let date = new Date().toISOString();
+        let LogDirectory = path.join(__dirname,"..","..","Logger");
+        let LogPathServer = path.join(__dirname,"..","..","Logger","serverlog.log");
+        let LogPathDatabase = path.join(__dirname,"..","..","Logger","databaselog.log");
         if(err){
             //check the type of status we get
             let status:number = res.statusCode;
@@ -88,13 +114,13 @@ export default class Logger{
             let IPAddress = req.ip
 
             //construct final string
-            const FinalString:string = origin +" " + originAgain + " " + protocol +"-- ["+this.date.toString().slice(0,29)+"] " +"\""+HTTPMethod+route+HTTPVersion+status+PORT+"\"-\""+Device+IPAddress+"\n";
+            const FinalString:string = origin +" " + " " + originAgain + " " + protocol +" -- ["+(date ?? (date ?? new Date().toISOString()) +"\n")+"] " +"\""+ " " + HTTPMethod + " " + route + " " + HTTPVersion + " "+status + " " +PORT + " \" - "+Device+IPAddress+"\n";
             //write to file
-            if(existsSync(this.LogDirectory)){
+            if(existsSync((LogDirectory ?? path.join(__dirname,"..","..","Logger")))){
                 //file already exists
                 //Append the message to the file
                 try{
-                    await fs.promises.appendFile(this.LogPathServer,FinalString);
+                    await fs.promises.appendFile((LogPathServer ?? path.join(__dirname,"..","..","Logger","serverlog.log")),FinalString);
                 }catch(err){
                     console.log("Error occured: ",err);
             }
@@ -102,8 +128,8 @@ export default class Logger{
                 //file does not exists
                 //make directory and create new file and write the message to it
                 try{
-                    fs.promises.mkdir(this.LogDirectory);
-                    fs.promises.writeFile(this.LogPathServer,FinalString);
+                    fs.promises.mkdir((LogDirectory ?? path.join(__dirname,"..","..","Logger")));
+                    fs.promises.writeFile((LogPathServer ?? path.join(__dirname,"..","..","Logger","serverlog.log")),FinalString);
                 }catch(err){
                     console.log("Error occured: ",err);
                 }
@@ -114,12 +140,16 @@ export default class Logger{
     }
 
     async logDatabase(message:any){
+        let date = new Date().toISOString();
+        let LogDirectory = path.join(__dirname,"..","..","Logger");
+        let LogPathServer = path.join(__dirname,"..","..","Logger","serverlog.log");
+        let LogPathDatabase = path.join(__dirname,"..","..","Logger","databaselog.log");
         //Just to log Database access
         //write to file
-        const FinalString = this.date + message +"\n";
-        if(existsSync(this.LogDirectory)){
+        const FinalString = (date ?? new Date().toISOString()) + " "+ message +"\n";
+        if(existsSync((LogDirectory ?? path.join(__dirname,"..","..","Logger")))){
             try{
-                fs.promises.appendFile(this.LogPathDatbase,FinalString);
+                fs.promises.appendFile((LogPathDatabase ?? path.join(__dirname,"..","..","Logger","databaselog.log")),FinalString);
             }catch(err){
                 console.log("Error occured: ",err);
             }
@@ -127,11 +157,11 @@ export default class Logger{
             //file does not exists
             //make directory and create new file and write the message to it
             try{
-                console.log(this.LogDirectory);
+                console.log((LogDirectory ?? path.join(__dirname,"..","..","Logger")));
                 console.log(__dirname)
                 //make directory
-                await fs.promises.mkdir(this.LogDirectory);
-                await fs.promises.writeFile(this.LogPathDatbase,FinalString);
+                await fs.promises.mkdir((LogDirectory ?? path.join(__dirname,"..","..","Logger")));
+                await fs.promises.writeFile((LogPathDatabase ?? path.join(__dirname,"..","..","Logger","databaselog.log")),FinalString);
             }catch(err){
                 console.log("Error occured: ",err);
             }

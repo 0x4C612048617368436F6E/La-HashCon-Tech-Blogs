@@ -31,16 +31,43 @@ var REPSONSESTATUSCODE;
     REPSONSESTATUSCODE[REPSONSESTATUSCODE["SERVERERROR"] = 4] = "SERVERERROR";
 })(REPSONSESTATUSCODE || (REPSONSESTATUSCODE = {}));
 class Logger {
-    constructor() {
-        this.LogDirectory = node_path_1.default.join(__dirname, "..", "..", "Logger");
-        this.LogPathServer = node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log");
-        this.LogPathDatbase = node_path_1.default.join(__dirname, "..", "..", "Logger", "databaselog.log");
-        //here just construct the date
-        this.date = new Date();
-        //const Cdate:string = date.toString().slice(0,-29);
+    logMessageForServer(message) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let date = new Date().toISOString();
+            let LogDirectory = node_path_1.default.join(__dirname, "..", "..", "Logger");
+            let LogPathServer = node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log");
+            let LogPathDatabase = node_path_1.default.join(__dirname, "..", "..", "Logger", "databaselog.log");
+            //write to file
+            const FinalString = (date !== null && date !== void 0 ? date : new Date().toISOString()) + " " + message + "\n";
+            if ((0, node_fs_1.existsSync)((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")))) {
+                //file already exists
+                //Append the message to the file
+                try {
+                    yield node_fs_2.default.promises.appendFile((LogPathServer !== null && LogPathServer !== void 0 ? LogPathServer : node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log")), FinalString);
+                }
+                catch (err) {
+                    console.log("Error occured: ", err);
+                }
+            }
+            else {
+                //file does not exists
+                //make directory and create new file and write the message to it
+                try {
+                    node_fs_2.default.promises.mkdir((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")));
+                    node_fs_2.default.promises.writeFile((LogPathServer !== null && LogPathServer !== void 0 ? LogPathServer : node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log")), FinalString);
+                }
+                catch (err) {
+                    console.log("Error occured: ", err);
+                }
+            }
+        });
     }
     logMessage(req, res, next) {
         return __awaiter(this, void 0, void 0, function* () {
+            let date = new Date().toISOString();
+            let LogDirectory = node_path_1.default.join(__dirname, "..", "..", "Logger");
+            let LogPathServer = node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log");
+            let LogPathDatabase = node_path_1.default.join(__dirname, "..", "..", "Logger", "databaselog.log");
             //check the type of status we get
             let status = res.statusCode;
             let HTTPMethod = req.method;
@@ -70,13 +97,13 @@ class Logger {
                 RESPONSESTATUS = REPSONSESTATUSCODE.SERVERERROR;
             }
             //construct final string
-            const FinalString = origin + " " + originAgain + " " + protocol + "-- [" + this.date.toString().slice(0, 29) + "] " + "\"" + HTTPMethod + route + HTTPVersion + status + PORT + "\"-\"" + Device + IPAddress + "\n";
+            const FinalString = origin + " " + " " + originAgain + " " + protocol + " -- [" + (date !== null && date !== void 0 ? date : (date !== null && date !== void 0 ? date : new Date().toISOString()) + "\n") + "] " + "\"" + " " + HTTPMethod + " " + route + " " + HTTPVersion + " " + status + " " + PORT + " \" - " + Device + IPAddress + "\n";
             //write to file
-            if ((0, node_fs_1.existsSync)(this.LogDirectory)) {
+            if ((0, node_fs_1.existsSync)((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")))) {
                 //file already exists
                 //Append the message to the file
                 try {
-                    yield node_fs_2.default.promises.appendFile(this.LogPathServer, FinalString);
+                    yield node_fs_2.default.promises.appendFile((LogPathServer !== null && LogPathServer !== void 0 ? LogPathServer : node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log")), FinalString);
                 }
                 catch (err) {
                     console.log("Error occured: ", err);
@@ -86,8 +113,8 @@ class Logger {
                 //file does not exists
                 //make directory and create new file and write the message to it
                 try {
-                    node_fs_2.default.promises.mkdir(this.LogDirectory);
-                    node_fs_2.default.promises.writeFile(this.LogPathServer, FinalString);
+                    node_fs_2.default.promises.mkdir((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")));
+                    node_fs_2.default.promises.writeFile((LogPathServer !== null && LogPathServer !== void 0 ? LogPathServer : node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log")), FinalString);
                 }
                 catch (err) {
                     console.log("Error occured: ", err);
@@ -96,14 +123,64 @@ class Logger {
             next();
         });
     }
+    logError(err, req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let date = new Date().toISOString();
+            let LogDirectory = node_path_1.default.join(__dirname, "..", "..", "Logger");
+            let LogPathServer = node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log");
+            let LogPathDatabase = node_path_1.default.join(__dirname, "..", "..", "Logger", "databaselog.log");
+            if (err) {
+                //check the type of status we get
+                let status = res.statusCode;
+                let HTTPMethod = req.method;
+                let origin = req.get('host'); //i.e. from whihc origin
+                let originAgain = req.hostname;
+                let route = req.path;
+                let HTTPVersion = req.httpVersion; //The HTTP version
+                let protocol = req.protocol;
+                let PORT = req.socket.localPort;
+                let Device = req.device;
+                let IPAddress = req.ip;
+                //construct final string
+                const FinalString = origin + " " + " " + originAgain + " " + protocol + " -- [" + (date !== null && date !== void 0 ? date : (date !== null && date !== void 0 ? date : new Date().toISOString()) + "\n") + "] " + "\"" + " " + HTTPMethod + " " + route + " " + HTTPVersion + " " + status + " " + PORT + " \" - " + Device + IPAddress + "\n";
+                //write to file
+                if ((0, node_fs_1.existsSync)((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")))) {
+                    //file already exists
+                    //Append the message to the file
+                    try {
+                        yield node_fs_2.default.promises.appendFile((LogPathServer !== null && LogPathServer !== void 0 ? LogPathServer : node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log")), FinalString);
+                    }
+                    catch (err) {
+                        console.log("Error occured: ", err);
+                    }
+                }
+                else {
+                    //file does not exists
+                    //make directory and create new file and write the message to it
+                    try {
+                        node_fs_2.default.promises.mkdir((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")));
+                        node_fs_2.default.promises.writeFile((LogPathServer !== null && LogPathServer !== void 0 ? LogPathServer : node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log")), FinalString);
+                    }
+                    catch (err) {
+                        console.log("Error occured: ", err);
+                    }
+                }
+                next();
+            }
+        });
+    }
     logDatabase(message) {
         return __awaiter(this, void 0, void 0, function* () {
+            let date = new Date().toISOString();
+            let LogDirectory = node_path_1.default.join(__dirname, "..", "..", "Logger");
+            let LogPathServer = node_path_1.default.join(__dirname, "..", "..", "Logger", "serverlog.log");
+            let LogPathDatabase = node_path_1.default.join(__dirname, "..", "..", "Logger", "databaselog.log");
             //Just to log Database access
             //write to file
-            const FinalString = this.date + message + "\n";
-            if ((0, node_fs_1.existsSync)(this.LogDirectory)) {
+            const FinalString = (date !== null && date !== void 0 ? date : new Date().toISOString()) + " " + message + "\n";
+            if ((0, node_fs_1.existsSync)((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")))) {
                 try {
-                    node_fs_2.default.promises.appendFile(this.LogPathDatbase, FinalString);
+                    node_fs_2.default.promises.appendFile((LogPathDatabase !== null && LogPathDatabase !== void 0 ? LogPathDatabase : node_path_1.default.join(__dirname, "..", "..", "Logger", "databaselog.log")), FinalString);
                 }
                 catch (err) {
                     console.log("Error occured: ", err);
@@ -113,11 +190,11 @@ class Logger {
                 //file does not exists
                 //make directory and create new file and write the message to it
                 try {
-                    console.log(this.LogDirectory);
+                    console.log((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")));
                     console.log(__dirname);
                     //make directory
-                    yield node_fs_2.default.promises.mkdir(this.LogDirectory);
-                    yield node_fs_2.default.promises.writeFile(this.LogPathDatbase, FinalString);
+                    yield node_fs_2.default.promises.mkdir((LogDirectory !== null && LogDirectory !== void 0 ? LogDirectory : node_path_1.default.join(__dirname, "..", "..", "Logger")));
+                    yield node_fs_2.default.promises.writeFile((LogPathDatabase !== null && LogPathDatabase !== void 0 ? LogPathDatabase : node_path_1.default.join(__dirname, "..", "..", "Logger", "databaselog.log")), FinalString);
                 }
                 catch (err) {
                     console.log("Error occured: ", err);

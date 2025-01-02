@@ -13,7 +13,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 //Database configuration
-const mongodb_1 = require("mongodb");
+const mongoose_1 = __importDefault(require("mongoose"));
 //import logger here to use for database
 const logger_1 = __importDefault(require("../middleware/logger"));
 const logger = new logger_1.default();
@@ -24,25 +24,16 @@ const databaseConnection = () => __awaiter(void 0, void 0, void 0, function* () 
         console.log("Error extracting Value");
         return;
     }
-    const client = new mongodb_1.MongoClient(MONGODBURLSTRING, {
-        serverApi: {
-            version: mongodb_1.ServerApiVersion.v1,
-            strict: true,
-            deprecationErrors: true,
-        }
-    });
+    const MongooseObject = {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    };
     try {
-        yield client.connect();
-        //send a ping to confirm a successful connection
-        yield client.db("admin").command({ ping: 1 });
-        logger.logDatabase(" Pinged your deployment. You successfully connected to MongoDB!");
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        mongoose_1.default.connect(MONGODBURLSTRING, MongooseObject);
     }
     catch (err) {
         logger.logDatabase(err);
         console.log("Error :", err);
-        //since there is an error, we want to just exit everything, i.e. terminate the server
-        process.exit(-1);
     }
 });
 exports.default = databaseConnection;

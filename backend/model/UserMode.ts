@@ -1,45 +1,46 @@
 //Create out userModel Schema here
-import {Schema} from 'mongodb';
+import {Schema} from 'mongoose';
+import mongoose from 'mongoose'
 
-const User = new Schema({
+const userModel = new Schema({
     userInfo:{
         FullName:{
-            type:string,
+            type:String,
             required:true
         },
         Email:{
-            type:string,
+            type:String,
             required:true
         },
         Password:{
-            type:string,
+            type:String,
             required:true
         },
         bio:{
-            type:string,
+            type:String,
             default:"",
             maxLength:80
         },
         profilePic:{
-            type:string,
+            type:String,
             default:"Still Thinking"
         },
         //social media
         Tiktok:{
-            type:string,
+            type:String,
             default:"",
         },
         Instagram:{
-            type:string,
+            type:String,
             default:"",
         },
         Facebook:{
-            type:string,
+            type:String,
             default:"",
         },
         GitHub:{
-            type:string,
-            require:"",
+            type:String,
+            default:"",
         },
         //account information
         totalPosts:{
@@ -52,9 +53,14 @@ const User = new Schema({
         },
         //auth tokens... Will be using JWT and google and Discord
         refreshToken:{
-            type:string,
+            type:String,
             default:""
         },
 
     }
 })
+
+//create a new model and export it
+const User = mongoose.model("User",userModel);
+
+export default User;
