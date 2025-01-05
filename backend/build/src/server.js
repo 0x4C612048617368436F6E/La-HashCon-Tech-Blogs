@@ -11,6 +11,8 @@ const cors_1 = __importDefault(require("cors"));
 const corsOptionConfig_1 = __importDefault(require("../config/corsOptionConfig"));
 const homeRoute_1 = __importDefault(require("../routes/homeRoute"));
 const signupRoute_1 = __importDefault(require("../routes/signupRoute"));
+const loginRoute_1 = __importDefault(require("../routes/loginRoute"));
+const cookie_parser_1 = __importDefault(require("cookie-parser"));
 //import homeRoute from '../routes/homeRoute';
 require('dotenv').config();
 let app = (0, express_1.default)();
@@ -20,10 +22,12 @@ let PORT = process.env.PORT || 5000;
 app.use((0, cors_1.default)(corsOptionConfig_1.default));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());
+app.use((0, cookie_parser_1.default)());
 const logger = new logger_1.default();
 app.use(logger.logMessage);
 app.use('/', homeRoute_1.default);
 app.use('/signup', signupRoute_1.default);
+app.use('/login', loginRoute_1.default);
 app.use(logger.logError);
 //want to connect to database and then connect to server. If connection to databsae failes, no to concect to server
 mongoose_1.default.connection.on('connecting', () => {

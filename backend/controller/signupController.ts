@@ -16,7 +16,30 @@ const signupControllerGET = (req:any,res:any)=>{
         }
     res.status(200);
     res.send(message);
+
+    //Note, iif user try to go to the SignupController and they are logged in, they will be redirected to the home page
     
+}
+
+const AlgorithmToCheckIfUserWithUserNameExist = ()=>{
+    //now we are going to create a username that is unique for the user - TIKTOK style
+    let possibleValues = ["0","1","2","3","4","5","6","7","8","9"];
+    let maxmissingValueLength = 15;
+    let missingRandomLength = Math.floor(Math.random()*maxmissingValueLength);
+    if(missingRandomLength < 0){
+        missingRandomLength = 0;
+    }
+    let RandomMissingValueLength = missingRandomLength; //random genrates number betwwwn 0 and 1, so multiply by missingValueLenght to get between 0 and 15
+    let remaining = "";
+    for(let i=0;i<RandomMissingValueLength;i++){
+        let randomIndex = Math.floor(Math.random()*10);
+        if(randomIndex < 0){
+            randomIndex = 0;
+        }
+        remaining+=possibleValues[randomIndex];
+    }
+
+    return "user"+ remaining;
 }
 
 const signupControllerPOST = async (req:any,res:any)=>{
@@ -35,6 +58,20 @@ const signupControllerPOST = async (req:any,res:any)=>{
         return res.json(message);
     }
 
+    
+    //now lets check whether this username already exists
+    let isUserNameAlreadyInUse = true;
+    let potentialUserName = AlgorithmToCheckIfUserWithUserNameExist();
+    while(isUserNameAlreadyInUse){
+        let userNameIsInUse = await User.findOne({"userInfo.Username":potentialUserName})
+        if(userNameIsInUse){
+            //redo teh whole algorithm
+            potentialUserName = AlgorithmToCheckIfUserWithUserNameExist();
+        }else{
+            isUserNameAlreadyInUse = false;
+        }
+    }
+
     //we will want to make sure that a user with the same email does not already exit. We only need to find 1 and not all of them
     //the fields we need are as follows:
     /*
@@ -47,12 +84,13 @@ const signupControllerPOST = async (req:any,res:any)=>{
 
         let hashedPassword = await bcrypt.hash(Password,salt);
         const JustMakingSureUserHasNotAlreadyRegistered = {
+            "userInfo.Username":potentialUserName,
             "userInfo.FullName":FullName,
             "userInfo.Email":Email,
             "userInfo.Password":hashedPassword
         }
         //JustMakingSureUserHasNotAlreadyRegistered
-        let findDuplicateUser = await User.findOne();
+        let findDuplicateUser = await User.findOne({"userInfo.Email":Email});
         if(findDuplicateUser){
             //So duplicate user have been found
             const message:messageFormat = {
@@ -70,6 +108,7 @@ const signupControllerPOST = async (req:any,res:any)=>{
         const message = {
             message:newUser
         }
+        console.log(message);
         res.status(200);
         return res.send(message);
 

@@ -12,6 +12,10 @@ const userModel = new mongoose_1.Schema({
             type: String,
             required: true
         },
+        Username: {
+            type: String,
+            required: true,
+        },
         Email: {
             type: String,
             required: true

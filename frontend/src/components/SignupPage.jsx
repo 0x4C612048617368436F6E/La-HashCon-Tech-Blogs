@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import visible from '../assets/visible.png';
 import invisible from '../assets/hidden.png';
+import { ToastContainer,toast,Zoom } from 'react-toastify';
 
 const SignupPage = () =>{
     let [IsFullNameLeftBlank,setIsFullNameLeftBlank] = useState(false);
@@ -22,26 +23,126 @@ const SignupPage = () =>{
     let [PasswordIsNotValid,setPasswordIsNotValid] = useState('');
     let [seePassword,setSeePassword] = useState(false);
 
+    const FieldLeftBlank = ()=>{
+        toast.warn("Field can not be left empty",{
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: false,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            transition: Zoom,})
+    }
     const handleSignUpPageSubmit = (e)=>{
         e.preventDefault();
 
         //lets check that we have all inputs (We do not really need this, but just to have a solid barrier)
         if(FullName === undefined || FullName ===""){
             setIsFullNameLeftBlank(()=>true);
+            FieldLeftBlank();
         }else{
             setIsFullNameLeftBlank(()=>false);
         } 
         
         if(Email === undefined || Email === ""){
             setIsEmailLeftBlank(()=>true);
+            FieldLeftBlank();
         }else{
             setIsEmailLeftBlank(()=>false);
         }
         
         if(Password === undefined || Password === ""){
             setIsPasswordLeftBlank(()=>true);
+            FieldLeftBlank();
         }else{
             setIsPasswordLeftBlank(()=>false);
+        }
+
+        //create all the different toast messages here
+        const pleaseEnterFirstNameAndLastNameOnly = ()=>{
+            toast.warn("Please enter you First and Last name only",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Zoom,
+                })
+        }
+
+        const FullNameIsNotInRightFormat = ()=>{
+            toString.warn("FullName is not of Right Format. Only letters are allowed",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Zoom,
+                })
+        }
+
+        const FullNameIsInRightFormat = ()=>{
+            toast.info("FullName is of Right Format",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Zoom,
+                })
+        }
+
+        const EmailIsNotValid = ()=>{
+            toast.warn("Email is not valid",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Zoom,
+                })
+        }
+        
+        const EmailIsValid = ()=>{
+            toast.info("Email is valid",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Zoom,
+                })
+        }
+
+        const PasswordMustContain8CharacterECT = ()=>{
+            toast.warn("Password must contain a minimum of 8 characters, at least one uppercase English letter, at least one lowercase English letter, at least one digit,and at least one special character",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Zoom,
+                })
         }
 
         //lets trim all input before passing them
@@ -58,18 +159,21 @@ const SignupPage = () =>{
             if(EnteredFullName.length !== 2){
                 //Tell users that the length of FullName must be 2
                 setEnterFirstNameAndLastNameOnly(()=>true)
-                console.log("Please enter you First and Last name only")
+                console.log("Please enter your First and Last name only")
+                pleaseEnterFirstNameAndLastNameOnly();
                 return;
             }else{
                 setEnterFirstNameAndLastNameOnly(()=>false);
             }
             setFullNameIsNotInRightFormat(()=>true);
             console.log("FullName is not of Right Format. Only letters are allowed");
+            FullNameIsNotInRightFormat();
             return;
         }else{
             //User name are in the  right Format
             setFullNameIsNotInRightFormat(()=>false);
             console.log("FullName is of Right Format");
+            FullNameIsInRightFormat();
         }
 
         //lets work on the email
@@ -78,11 +182,13 @@ const SignupPage = () =>{
             //email is invalid
             console.log("Email is not valid");
             setEmailIsNotValid(()=>true);
+            EmailIsNotValid();
             return;
         }
         else{
             console.log("Email is valid");
             setEmailIsNotValid(()=>false);
+            EmailIsValid();
         }
         //console.log(`Email: ${FullName}`);
 
@@ -92,6 +198,7 @@ const SignupPage = () =>{
             //here password does not abide by rules
             console.log("Password must contain a minimum of 8 characters, at least one uppercase English letter, at least one lowercase English letter, at least one digit,and at least one special character");
             setPasswordIsNotValid(()=>true);
+            PasswordMustContain8CharacterECT();
             return;
         }else{
             console.log("Password is accepted");
@@ -106,8 +213,10 @@ const SignupPage = () =>{
         setSeePassword((prev)=>!prev);
     }
 
+
     return(
 <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+    <ToastContainer />
     <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div className="mt-12 flex flex-col items-center">
@@ -170,7 +279,7 @@ const SignupPage = () =>{
                             type={seePassword ? "text" : "password"} placeholder="Password" value={Password} onChange={(e)=>{setPassword(()=>e.target.value)}}/>
                             <img src={seePassword ? visible : invisible} className='w-5 absolute right-5 top-10 cursor-pointer' onClick={()=>showPassword()}/>
                         </div>
-                            {IsPasswordLeftBlank && <p className='text-red-600'>Field can not be left empty</p> || PasswordIsNotValid && <p classNameA='text-red-600'>Password must contain a minimum of 8 characters, at least one uppercase English letter, at least one lowercase English letter, at least one digit,and at least one special character</p> || <p></p>}
+                            {IsPasswordLeftBlank && <p className='text-red-600'>Field can not be left empty</p> || PasswordIsNotValid && <p className='text-red-600'>Password must contain a minimum of 8 characters, at least one uppercase English letter, at least one lowercase English letter, at least one digit,and at least one special character</p> || <p></p>}
 
                         <button
                             className="w-full max-w-xs font-bold shadow-sm rounded-lg py-3 bg-black hover:bg-white hover:text-black text-white flex items-center justify-center transition-all duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline mt-5">

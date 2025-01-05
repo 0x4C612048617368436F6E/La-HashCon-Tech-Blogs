@@ -6,6 +6,8 @@ import cors from 'cors';
 import corsOptionConfig from '../config/corsOptionConfig';
 import homeRouter from '../routes/homeRoute'
 import signupRouter from '../routes/signupRoute'
+import logininRouter from '../routes/loginRoute';
+import cookieParser from 'cookie-parser'
 //import homeRoute from '../routes/homeRoute';
 require('dotenv').config();
 let app = express();
@@ -17,11 +19,13 @@ databaseConnection();
 app.use(cors(corsOptionConfig));
 app.use(express.urlencoded({extended:false}));
 app.use(express.json());
+app.use(cookieParser());
 const logger = new Logger();
 app.use(logger.logMessage);
 
 app.use('/',homeRouter);
 app.use('/signup',signupRouter);
+app.use('/login',logininRouter);
 
 
 app.use(logger.logError);
