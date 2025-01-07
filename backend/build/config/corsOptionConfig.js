@@ -2,7 +2,7 @@
 //configure cors options here
 Object.defineProperty(exports, "__esModule", { value: true });
 //lets define the white-lists Whihc are the allowed origins
-let allowedOrigins = ["localhost"]; //Since this is a Private API, we only want our Front-end and any development frontend origin
+let allowedOrigins = ["localhost", "http://localhost:3000"]; //Since this is a Private API, we only want our Front-end and any development frontend origin
 const corsOptions = {
     origin: (origin, callback) => {
         //check if origin is not in white list

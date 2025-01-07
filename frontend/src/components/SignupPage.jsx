@@ -6,6 +6,7 @@ import { Link } from 'react-router-dom';
 import visible from '../assets/visible.png';
 import invisible from '../assets/hidden.png';
 import { ToastContainer,toast,Zoom } from 'react-toastify';
+import axios from 'axios'
 
 const SignupPage = () =>{
     let [IsFullNameLeftBlank,setIsFullNameLeftBlank] = useState(false);
@@ -60,6 +61,30 @@ const SignupPage = () =>{
             setIsPasswordLeftBlank(()=>false);
         }
 
+        const CreatedUserSuccessfully = ()=>{
+            toast.success("Created user successfully",{
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "dark",
+                transition: Zoom,
+                })
+        }
+
+        const sendUserInformationToTheBackEnd = async (dataToSend)=>{
+            //we will use axios to simplify things
+            try{
+                await axios.post("http://localhost:5000/Signup",dataToSend);
+                CreatedUserSuccessfully();
+            }catch(err){
+                console.log(err);
+            }
+        }
+
         //create all the different toast messages here
         const pleaseEnterFirstNameAndLastNameOnly = ()=>{
             toast.warn("Please enter you First and Last name only",{
@@ -76,7 +101,7 @@ const SignupPage = () =>{
         }
 
         const FullNameIsNotInRightFormat = ()=>{
-            toString.warn("FullName is not of Right Format. Only letters are allowed",{
+            toast.warn("FullName is not of Right Format. Only letters are allowed",{
                 position: "top-right",
                 autoClose: 5000,
                 hideProgressBar: false,
@@ -145,6 +170,7 @@ const SignupPage = () =>{
                 })
         }
 
+
         //lets trim all input before passing them
         FullName = FullName.trim();
         Email = Email.trim();
@@ -205,13 +231,23 @@ const SignupPage = () =>{
             setPasswordIsNotValid(()=>false);
         }
         //console.log(`Password: ${FullName}`);
+
+        const DataToSend = {
+            "FullName":FullName,
+            "Email":Email,
+            "Password":Password
+        }
+
+        sendUserInformationToTheBackEnd(DataToSend);
     }
+
 
     const showPassword = ()=>{
         //when OnClick is activated, we show/unshow the password
         console.log("Show/Unshow Password");
         setSeePassword((prev)=>!prev);
     }
+
 
 
     return(
