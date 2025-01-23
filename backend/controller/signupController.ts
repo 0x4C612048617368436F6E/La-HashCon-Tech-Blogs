@@ -1,5 +1,5 @@
 //import the usr model
-import User from '../model/UserMode';
+import User from '../model/UserModel';
 import Logger from '../middleware/logger';
 import bcrypt from 'bcrypt'
 

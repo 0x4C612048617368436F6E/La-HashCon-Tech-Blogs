@@ -1,4 +1,5 @@
 //Create out userModel Schema here
+import { timeStamp } from 'console';
 import {Schema} from 'mongoose';
 import mongoose from 'mongoose'
 
@@ -60,6 +61,7 @@ const userModel = new Schema({
             type:String,
             default:""
         },
+        timeStamps:{timestamps:true},
 
     }
 })

@@ -2,7 +2,7 @@ import Video from '../assets/204565-924698132_small.mp4';
 import Google from '../assets/google.png';
 import Github from '../assets/github.png';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,Navigate } from 'react-router-dom';
 import visible from '../assets/visible.png';
 import invisible from '../assets/hidden.png';
 import { ToastContainer,toast,Zoom } from 'react-toastify';
@@ -21,10 +21,12 @@ const SignupPage = () =>{
     let [EmailIsNotValid,setEmailIsNotValid] = useState(false);
 
     let [Password,setPassword] = useState(''); //for Password input
-    let [PasswordIsNotValid,setPasswordIsNotValid] = useState('');
+    let [PasswordIsNotValid,setPasswordIsNotValid] = useState(false);
     let [seePassword,setSeePassword] = useState(false);
 
-    const FieldLeftBlank = ()=>{
+    let [userCreatedSuccessfully,setUserCreatedSuccessfully] = useState(false);
+
+    const FieldLeftBlank = ():void =>{
         toast.warn("Field can not be left empty",{
             position: "top-right",
             autoClose: 5000,
@@ -36,7 +38,7 @@ const SignupPage = () =>{
             theme: "dark",
             transition: Zoom,})
     }
-    const handleSignUpPageSubmit = (e)=>{
+    const handleSignUpPageSubmit = (e:any):void =>{
         e.preventDefault();
 
         //lets check that we have all inputs (We do not really need this, but just to have a solid barrier)
@@ -61,7 +63,7 @@ const SignupPage = () =>{
             setIsPasswordLeftBlank(()=>false);
         }
 
-        const CreatedUserSuccessfully = ()=>{
+        const CreatedUserSuccessfully = ():void =>{
             toast.success("Created user successfully",{
                 position: "top-right",
                 autoClose: 5000,
@@ -73,9 +75,11 @@ const SignupPage = () =>{
                 theme: "dark",
                 transition: Zoom,
                 })
+
+                setUserCreatedSuccessfully(()=>true);
         }
 
-        const sendUserInformationToTheBackEnd = async (dataToSend)=>{
+        const sendUserInformationToTheBackEnd = async (dataToSend:any):Promise<void> =>{
             //we will use axios to simplify things
             try{
                 await axios.post("http://localhost:5000/Signup",dataToSend);
@@ -86,7 +90,7 @@ const SignupPage = () =>{
         }
 
         //create all the different toast messages here
-        const pleaseEnterFirstNameAndLastNameOnly = ()=>{
+        const pleaseEnterFirstNameAndLastNameOnly = ():void =>{
             toast.warn("Please enter you First and Last name only",{
                 position: "top-right",
                 autoClose: 5000,
@@ -100,7 +104,7 @@ const SignupPage = () =>{
                 })
         }
 
-        const FullNameIsNotInRightFormat = ()=>{
+        const FullNameIsNotInRightFormat = ():void =>{
             toast.warn("FullName is not of Right Format. Only letters are allowed",{
                 position: "top-right",
                 autoClose: 5000,
@@ -114,7 +118,7 @@ const SignupPage = () =>{
                 })
         }
 
-        const FullNameIsInRightFormat = ()=>{
+        const FullNameIsInRightFormat = ():void =>{
             toast.info("FullName is of Right Format",{
                 position: "top-right",
                 autoClose: 5000,
@@ -128,7 +132,7 @@ const SignupPage = () =>{
                 })
         }
 
-        const EmailIsNotValid = ()=>{
+        const EmailIsNotValid = ():void=>{
             toast.warn("Email is not valid",{
                 position: "top-right",
                 autoClose: 5000,
@@ -142,7 +146,7 @@ const SignupPage = () =>{
                 })
         }
         
-        const EmailIsValid = ()=>{
+        const EmailIsValid = ():void =>{
             toast.info("Email is valid",{
                 position: "top-right",
                 autoClose: 5000,
@@ -156,7 +160,7 @@ const SignupPage = () =>{
                 })
         }
 
-        const PasswordMustContain8CharacterECT = ()=>{
+        const PasswordMustContain8CharacterECT = ():void=>{
             toast.warn("Password must contain a minimum of 8 characters, at least one uppercase English letter, at least one lowercase English letter, at least one digit,and at least one special character",{
                 position: "top-right",
                 autoClose: 5000,
@@ -180,7 +184,7 @@ const SignupPage = () =>{
         let FullNameRegex = /^[a-zA-Z]+ [a-zA-Z]+$/;
         if(!FullNameRegex.test(FullName)){
             //lets check soome condition
-            let EnteredFullName = (FullName.trim()).split(' ');
+            let EnteredFullName:String[] = (FullName.trim()).split(' ');
             //Check that the length of EnteredFullName is no more than 2
             if(EnteredFullName.length !== 2){
                 //Tell users that the length of FullName must be 2
@@ -330,6 +334,8 @@ const SignupPage = () =>{
                                 </Link>
                         </p>
                     </form>
+                    {/*If user successfully Signs up, we navigate them to the Login Page*/}
+                    {userCreatedSuccessfully && <Navigate to="/login"/>}
                 </div>
             </div>
         </div>
