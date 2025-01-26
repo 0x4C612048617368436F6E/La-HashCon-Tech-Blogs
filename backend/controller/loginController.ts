@@ -67,12 +67,13 @@ const loginControllerPOST = async (req:any,res:any)=>{
             const update = {"userInfo.refreshToken":JWT_REFRESH_TOKEN};
             let UpdatedRefreshToken = await User.findOneAndUpdate({"userInfo.Email":Email},update);
             console.log(UpdatedRefreshToken);
-            //send the access as JSON to the frontend
-            res.status(200);
             res.cookie("REFRESH_TOKEN",JWT_REFRESH_TOKEN,{maxage:"60s",httpOnly:true});
             res.json({"message":"Login Successful",
                 "JWT_ACCESS_TOKEN":JWT_ACCESS_TOKEN});
             //send the refreshtoek as cookie (http cookie)
+
+             //send the access as JSON to the frontend
+             res.status(200);
 
         
         }else{

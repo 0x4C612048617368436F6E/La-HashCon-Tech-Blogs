@@ -9,25 +9,25 @@ import { ToastContainer,toast,Zoom } from 'react-toastify';
 import axios from 'axios'
 
 const SignupPage = () =>{
-    let [IsFullNameLeftBlank,setIsFullNameLeftBlank] = useState(false);
-    let [IsEmailLeftBlank,setIsEmailLeftBlank] = useState(false);
-    let [IsPasswordLeftBlank,setIsPasswordLeftBlank] = useState(false);
+    const [IsFullNameLeftBlank,setIsFullNameLeftBlank] = useState(false);
+    const [IsEmailLeftBlank,setIsEmailLeftBlank] = useState(false);
+    const [IsPasswordLeftBlank,setIsPasswordLeftBlank] = useState(false);
 
-    let [FullName,setFullName] = useState(''); //for FullName input
-    let [EnterFirstNameAndLastNameOnly,setEnterFirstNameAndLastNameOnly] = useState(false);
-    let [FullNameIsNotInRightFormat,setFullNameIsNotInRightFormat] = useState(false);
+    const [FullName,setFullName] = useState(''); //for FullName input
+    const [EnterFirstNameAndLastNameOnly,setEnterFirstNameAndLastNameOnly] = useState(false);
+    const [FullNameIsNotInRightFormat,setFullNameIsNotInRightFormat] = useState(false);
 
-    let [Email,setEmail] = useState(''); //for Email input
-    let [EmailIsNotValid,setEmailIsNotValid] = useState(false);
+    const [Email,setEmail] = useState(''); //for Email input
+    const [EmailIsNotValid,setEmailIsNotValid] = useState(false);
 
-    let [Password,setPassword] = useState(''); //for Password input
-    let [PasswordIsNotValid,setPasswordIsNotValid] = useState(false);
-    let [seePassword,setSeePassword] = useState(false);
+    const [Password,setPassword] = useState(''); //for Password input
+    const [PasswordIsNotValid,setPasswordIsNotValid] = useState(false);
+    const [seePassword,setSeePassword] = useState(false);
 
-    let [userCreatedSuccessfully,setUserCreatedSuccessfully] = useState(false);
+    const [userCreatedSuccessfully,setUserCreatedSuccessfully] = useState(false);
 
     const FieldLeftBlank = ():void =>{
-        toast.warn("Field can not be left empty",{
+        toast.warn("Field can not be left blank",{
             position: "top-right",
             autoClose: 5000,
             hideProgressBar: false,
@@ -176,9 +176,9 @@ const SignupPage = () =>{
 
 
         //lets trim all input before passing them
-        FullName = FullName.trim();
-        Email = Email.trim();
-        Password = Password.trim()
+        setFullName(()=>FullName.trim());
+        setEmail(()=>Email.trim());
+        setPassword(()=>Password.trim());
         //check that the FullName contains the right format, use regex
         //console.log(`FullName: ${FullName}`);
         let FullNameRegex = /^[a-zA-Z]+ [a-zA-Z]+$/;
