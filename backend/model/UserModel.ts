@@ -3,6 +3,20 @@ import { timeStamp } from 'console';
 import {Schema} from 'mongoose';
 import mongoose from 'mongoose'
 
+/*
+Will also include roles, such as:
+1.) User - Default - Can View Posts only
+2.) Editor - Editors can add blogs
+3.) Admin - Should be Only Me. I can Delete Users, Post (if not positive), and much more
+
+Lets make some adjustments
+User Will only have the role of a user
+
+Editor will have the role of a User and the role of an Editor
+
+Admin will have the role of a User, Editor and an Admin
+*/
+
 const userModel = new Schema({
     userInfo:{
         FullName:{
@@ -29,6 +43,10 @@ const userModel = new Schema({
         profilePic:{
             type:String,
             default:"Still Thinking"
+        },
+        userRole:{
+            type:String,
+            default:"User"
         },
         //social media
         Tiktok:{
@@ -61,7 +79,10 @@ const userModel = new Schema({
             type:String,
             default:""
         },
-        timeStamps:{timestamps:true},
+        timeStamps:{
+            type:Date,
+            default:new Date()
+        },
 
     }
 })

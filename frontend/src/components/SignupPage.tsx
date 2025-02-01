@@ -1,17 +1,19 @@
 import Video from '../assets/204565-924698132_small.mp4';
 import Google from '../assets/google.png';
 import Github from '../assets/github.png';
-import { useState } from 'react';
-import { Link,Navigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Link,Navigate, useNavigate } from 'react-router-dom';
 import visible from '../assets/visible.png';
 import invisible from '../assets/hidden.png';
 import { ToastContainer,toast,Zoom } from 'react-toastify';
 import axios from 'axios'
+import Spinner from './Spinner';
 
 const SignupPage = () =>{
     const [IsFullNameLeftBlank,setIsFullNameLeftBlank] = useState(false);
     const [IsEmailLeftBlank,setIsEmailLeftBlank] = useState(false);
     const [IsPasswordLeftBlank,setIsPasswordLeftBlank] = useState(false);
+
 
     const [FullName,setFullName] = useState(''); //for FullName input
     const [EnterFirstNameAndLastNameOnly,setEnterFirstNameAndLastNameOnly] = useState(false);
@@ -25,6 +27,23 @@ const SignupPage = () =>{
     const [seePassword,setSeePassword] = useState(false);
 
     const [userCreatedSuccessfully,setUserCreatedSuccessfully] = useState(false);
+    const [gettingDataFromBackEnd,setGetitngDataFromBackend] = useState(false);
+    const navigate = useNavigate();
+
+    useEffect(()=>{
+        if(userCreatedSuccessfully){
+            setTimeout(() => {
+                console.log(userCreatedSuccessfully);
+                navigateToLoginPage();
+            }, 2000);
+        }
+    },[userCreatedSuccessfully])
+
+    const navigateToLoginPage = ()=>{
+        return(
+            navigate("/login")
+        )
+    }
 
     const FieldLeftBlank = ():void =>{
         toast.warn("Field can not be left blank",{
@@ -81,12 +100,19 @@ const SignupPage = () =>{
 
         const sendUserInformationToTheBackEnd = async (dataToSend:any):Promise<void> =>{
             //we will use axios to simplify things
+
+            
+            //Will add a spinner so when user request for data to the backed, a spinner will appear. Will use If statement to handle stuff, and see if works
+            setGetitngDataFromBackend(()=>true);
             try{
-                await axios.post("http://localhost:5000/Signup",dataToSend);
+                let createdUser = await axios.post("http://localhost:5000/Signup",dataToSend);
+                //do some checks here
+                console.log(createdUser);
                 CreatedUserSuccessfully();
             }catch(err){
                 console.log(err);
             }
+            setGetitngDataFromBackend(()=>false);
         }
 
         //create all the different toast messages here
@@ -257,6 +283,7 @@ const SignupPage = () =>{
     return(
 <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
     <ToastContainer />
+    {userCreatedSuccessfully ? <Spinner /> : gettingDataFromBackEnd ? <Spinner /> :
     <div className="max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
         <div className="lg:w-1/2 xl:w-5/12 p-6 sm:p-12">
             <div className="mt-12 flex flex-col items-center">
@@ -335,7 +362,7 @@ const SignupPage = () =>{
                         </p>
                     </form>
                     {/*If user successfully Signs up, we navigate them to the Login Page*/}
-                    {userCreatedSuccessfully && <Navigate to="/login"/>}
+                    {userCreatedSuccessfully && <Spinner />}
                 </div>
             </div>
         </div>
@@ -347,7 +374,9 @@ const SignupPage = () =>{
             </div>
         </div>
     </div>
+}
 </div>
+    
     )
 }
 

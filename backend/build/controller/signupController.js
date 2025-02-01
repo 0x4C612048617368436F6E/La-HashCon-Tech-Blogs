@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.signupControllerPOST = exports.signupControllerGET = void 0;
 //import the usr model
-const UserMode_1 = __importDefault(require("../model/UserMode"));
+const UserModel_1 = __importDefault(require("../model/UserModel"));
 const logger_1 = __importDefault(require("../middleware/logger"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const logger = new logger_1.default();
@@ -24,7 +24,8 @@ const signupControllerGET = (req, res) => {
         message: "Welcome to the  SignUp Page"
     };
     res.status(200);
-    res.send(message);
+    console.log(message);
+    res.json(message);
     //Note, iif user try to go to the SignupController and they are logged in, they will be redirected to the home page
 };
 exports.signupControllerGET = signupControllerGET;
@@ -65,7 +66,7 @@ const signupControllerPOST = (req, res) => __awaiter(void 0, void 0, void 0, fun
     let isUserNameAlreadyInUse = true;
     let potentialUserName = AlgorithmToCheckIfUserWithUserNameExist();
     while (isUserNameAlreadyInUse) {
-        let userNameIsInUse = yield UserMode_1.default.findOne({ "userInfo.Username": potentialUserName });
+        let userNameIsInUse = yield UserModel_1.default.findOne({ "userInfo.Username": potentialUserName });
         if (userNameIsInUse) {
             //redo teh whole algorithm
             potentialUserName = AlgorithmToCheckIfUserWithUserNameExist();
@@ -91,7 +92,7 @@ const signupControllerPOST = (req, res) => __awaiter(void 0, void 0, void 0, fun
             "userInfo.Password": hashedPassword
         };
         //JustMakingSureUserHasNotAlreadyRegistered
-        let findDuplicateUser = yield UserMode_1.default.findOne({ "userInfo.Email": Email });
+        let findDuplicateUser = yield UserModel_1.default.findOne({ "userInfo.Email": Email });
         if (findDuplicateUser) {
             //So duplicate user have been found
             const message = {
@@ -100,16 +101,16 @@ const signupControllerPOST = (req, res) => __awaiter(void 0, void 0, void 0, fun
             res.status(400);
             return res.json(message);
         }
-        //here no diuplicate user, so create user
-        let newUser = yield UserMode_1.default.create(JustMakingSureUserHasNotAlreadyRegistered);
+        //there no diuplicate user, so create user
+        let newUser = yield UserModel_1.default.create(JustMakingSureUserHasNotAlreadyRegistered);
         yield newUser.save();
-        //so the newUser has been created, lets just send it as json
+        //so the newUser has been created, lets just send it as json 
         const message = {
             message: newUser
         };
         console.log(message);
         res.status(200);
-        return res.send(message);
+        return res.json(message);
     }
     catch (err) {
         console.log(err);

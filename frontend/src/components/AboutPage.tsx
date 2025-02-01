@@ -1,8 +1,9 @@
 import React from "react";
+import Spinner from "./Spinner";
 
 const AboutPage = ()=>{
     return(
-        <h1>In the AboutPage</h1>
+        <Spinner />
     )
 }
 

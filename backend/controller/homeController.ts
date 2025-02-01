@@ -1,3 +1,5 @@
+
+
 const homeController =(req:any,res:any)=>{
     //Can send stuff. Note this is an API only
     /*

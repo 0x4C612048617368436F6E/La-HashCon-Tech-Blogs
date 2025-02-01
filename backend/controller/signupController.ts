@@ -15,7 +15,8 @@ const signupControllerGET = (req:any,res:any)=>{
         message:"Welcome to the  SignUp Page"
         }
     res.status(200);
-    res.send(message);
+    console.log(message);
+    res.json(message);
 
     //Note, iif user try to go to the SignupController and they are logged in, they will be redirected to the home page
     
@@ -99,18 +100,18 @@ const signupControllerPOST = async (req:any,res:any)=>{
             res.status(400);
             return res.json(message);
         }
-        //here no diuplicate user, so create user
+        //there no diuplicate user, so create user
 
         let newUser = await User.create(JustMakingSureUserHasNotAlreadyRegistered);
         await newUser.save();
 
-        //so the newUser has been created, lets just send it as json
+        //so the newUser has been created, lets just send it as json 
         const message = {
             message:newUser
         }
         console.log(message);
         res.status(200);
-        return res.send(message);
+        return res.json(message);
 
     }
     catch(err){

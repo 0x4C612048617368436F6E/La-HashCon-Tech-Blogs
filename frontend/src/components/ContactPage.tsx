@@ -1,8 +1,9 @@
 import React from "react";
+import Spinner from "./Spinner";
 
 const ContactPage = ()=>{
     return(
-        <h1>In the ContactPage</h1>
+        <Spinner />
     )
 }
 

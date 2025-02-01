@@ -3,7 +3,7 @@ import { Routes, BrowserRouter, Route } from "react-router";
 import NavBar from './components/NavBar.tsx';
 import HomePage from './components/HomePage.tsx';
 import Error404 from './components/Error404.tsx';
-import SearchPage from './components/searchPage.tsx';
+import SearchPage from './components/SearchPage.tsx';
 import ExplorePage from './components/ExplorePage.tsx';
 import AboutPage from './components/AboutPage.tsx';
 import ContactPage from './components/ContactPage.tsx';

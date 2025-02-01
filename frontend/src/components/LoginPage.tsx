@@ -102,13 +102,22 @@ const LoginPage = ()=>{
                 //we will use axios to simplify things
                 try{
                     let userLogin = await axios.post("http://localhost:5000/Login",dataToSend);
-                    //UserLoginSuccessfully();
-                    console.log(userLogin.status);
+
                     if(userLogin.status == BackendResponse.CREDENTIALINCORRECT){
+                        console.log(userLogin.status);
                         UserLoginUnSuccessfully()
                         return;
                     }
+
+
                     if(userLogin.status == BackendResponse.USERLOGGEDIN){
+                        //lets just console the user stuff
+                        console.log("UserData: ", userLogin)
+                        //will set the userInformation here
+                        /* 
+                        Will use LocalStorage, as data persist even after page refresh
+                       
+                        */
                         UserLoginSuccessfully();
                         //take user to Next Page
                     }

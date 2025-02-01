@@ -4,6 +4,8 @@ import logo from '../assets/Logo.png'
 import searchIcon from '../assets/search-interface-symbol.png'
 import { motion,AnimatePresence } from 'framer-motion';
 const NavBar = ()=>{
+
+
     return(
         <>
          <AnimatePresence>
@@ -22,23 +24,23 @@ const NavBar = ()=>{
 		<div className="text-gray-500 order-3 w-full md:w-auto md:order-2">
 			<ul className="flex font-semibold justify-between">
         <Link to="/">
-				  <li className="md:px-4 md:py-2 text-black hover:border-b-solid hover:border-b-2 hover:border-black"><span>Home</span></li>
+				  <li className="mx-4 text-black"><span className="text-lg">Home</span></li>
         </Link>
 
         <Link to="Search">
-				  <li className="md:px-4 md:py-2 text-black hover:border-b-solid hover:border-b-2 hover:border-black"><span>Search</span></li>
+				  <li className="mx-4 text-black"><span className="text-lg">Search</span></li>
         </Link>
 
         <Link to="Explore">
-				  <li className="md:px-4 md:py-2 text-black hover:border-b-solid hover:border-b-2 hover:border-black"><span>Explore</span></li>
+				  <li className="mx-4 text-black"><span className="text-lg">Explore</span></li>
           </Link>
 
         <Link to="About">
-				  <li className="md:px-4 md:py-2 text-black hover:border-b-solid hover:border-b-2 hover:border-black"><span>About</span></li>
+				  <li className="mx-4 text-black"><span className="text-lg">About</span></li>
           </Link>
 
         <Link to="Contact">
-				  <li className="md:px-4 md:py-2 text-black hover:border-b-solid hover:border-b-2 hover:border-black"><span>Contact</span></li>
+				  <li className="mx-4 text-black"><span className="text-lg">Contact</span></li>
           </Link>
 			</ul>
 		</div>
