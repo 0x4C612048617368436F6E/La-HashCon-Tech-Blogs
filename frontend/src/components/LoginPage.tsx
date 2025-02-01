@@ -7,6 +7,8 @@ import { ToastContainer,toast, Zoom } from 'react-toastify';
 import axios from 'axios';
 import visible from '../assets/visible.png';
 import invisible from '../assets/hidden.png';
+import {addUser, getUser, deleteUser} from '../utility/session'
+import { current } from '@reduxjs/toolkit';
 
 const LoginPage = ()=>{
 
@@ -116,8 +118,33 @@ const LoginPage = ()=>{
                         //will set the userInformation here
                         /* 
                         Will use LocalStorage, as data persist even after page refresh
-                       
                         */
+
+                        //get user information
+                        let FirstName = userLogin.data.FirstName;
+                        let LastName = userLogin.data.LastName;
+                        let Email = userLogin.data.Email;
+                        let UserName = userLogin.data.UserName;
+                       
+                       //next will need to stringify object to store in localStorage
+                       type userInformation = {
+                        FirstName?:string | null,
+                        LastName?:string | null,
+                        UserName?:string | null,
+                        Email?:string | null,
+                        Role?:string,
+                    }
+
+                    let currentUserInformation:userInformation = {
+                        FirstName:FirstName,
+                        LastName:LastName,
+                        UserName:UserName,
+                        Email:Email,
+                    }
+
+                    console.log((currentUserInformation));
+                        addUser(JSON.stringify(currentUserInformation));
+
                         UserLoginSuccessfully();
                         //take user to Next Page
                     }

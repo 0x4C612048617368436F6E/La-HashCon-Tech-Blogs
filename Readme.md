@@ -32,4 +32,7 @@ Features include:
 
 - [ ] Embeeded Tiktok Features -> such as viewing Tiktok right from the blog
 
+Notes
+Use resources - [https://stackoverflow.com/questions/67976645/where-media-files-images-etc-should-be-stored-for-a-websites](Where to store Images)
+
 

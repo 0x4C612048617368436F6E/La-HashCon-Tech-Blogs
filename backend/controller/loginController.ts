@@ -72,7 +72,8 @@ const loginControllerPOST = async (req:any,res:any)=>{
             const JWT_ACCESS_TOKEN = JWT.sign(payload,ACCESS_TOKEN,{expiresIn:"30s"});
             //1000 = 1 milliseconds -> 30*1000 = 30 seconds
             const JWT_REFRESH_TOKEN = JWT.sign(payload,REFRESH_TOKEN,{expiresIn:"60s"});
-            
+
+
             //we will need to first update the user  which have logged in - their refresh-token
 
             const update = {"userInfo.refreshToken":JWT_REFRESH_TOKEN};

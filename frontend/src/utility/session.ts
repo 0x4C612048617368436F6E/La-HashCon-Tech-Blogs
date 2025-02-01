@@ -2,15 +2,22 @@
 
 type funSignature = (userValue?:string|undefined) => void;
 type funDignatureReturnUser = (userKey:string) => string | null
+type userInformation = {
+    FirstName?:string | null,
+    LastName?:string | null,
+    UserName?:string | null,
+    Email?:string | null,
+    Role?:string,
+}
 
-const addUser:funSignature = (user:string|undefined) =>{
+
+const addUser:funSignature = (user:userInformation|string|undefined) =>{
     //add user to LocalStorage
     if(user == undefined){
         localStorage.setItem("user"," ");
         return;
     }
-
-    localStorage.setItem("user",user);
+    localStorage.setItem("user",user.toString());
 
 }
 
