@@ -1,10 +1,14 @@
 import React from "react";
-import { Link, Outlet } from "react-router-dom";
+import { Link, Outlet,useLocation} from "react-router-dom";
 import logo from '../assets/Logo.png'
 import searchIcon from '../assets/search-interface-symbol.png'
 import { motion,AnimatePresence } from 'framer-motion';
 const NavBar = ()=>{
-
+  const location = useLocation();
+  const lowerCaseLogin = "/login";
+  const upperCaseLogin = "/Login";
+  const lowerCaseSignUp = "/signup";
+  const uppercaseSignUp = "/Signup";
 
     return(
         <>
@@ -47,12 +51,19 @@ const NavBar = ()=>{
 		<div className="order-2 md:order-3 flex">
 
 
-
-			  <Link to="Login">
+      {/*What we want to do is make is such that if User are on /Login route they will be routed to signup and if on signUp routed to Login
+      
+      IK beloe code is highly inefficient, but whatever works, then we leave
+      */}
+			  {location.pathname == lowerCaseLogin || location.pathname == upperCaseLogin ? <Link to="Signup">
         <button className="px-4 py-2 bg-black hover:text-black hover:bg-white text-white rounded-xl flex items-center gap-2 mr-5 duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
-                <span>Login</span>
+                <span>{(location.pathname == lowerCaseLogin || location.pathname == upperCaseLogin ? "Signup" : location.pathname == lowerCaseSignUp || location.pathname == uppercaseSignUp ? "Login" : "Login")}</span>
             </button>
-            </Link>
+            </Link> : <Link to="Login">
+        <button className="px-4 py-2 bg-black hover:text-black hover:bg-white text-white rounded-xl flex items-center gap-2 mr-5 duration-300 ease-in-out focus:outline-none hover:shadow focus:shadow-sm focus:shadow-outline">
+                <span>{(location.pathname == lowerCaseLogin || location.pathname == upperCaseLogin ? "Signup" : location.pathname == lowerCaseSignUp || location.pathname == uppercaseSignUp ? "Login" : "Login")}</span>
+            </button>
+            </Link>}
 		</div>
 	</div>
 </nav>
