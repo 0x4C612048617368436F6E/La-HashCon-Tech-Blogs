@@ -63,3 +63,5 @@ mongoose.connection.on('disconnected', () => {
     logger.logDatabase("Database connection disconected");
     logger.logDatabase("Ready State "+ mongoose.connection.readyState+"\n");
 });
+
+//Checking
