@@ -6,7 +6,7 @@ Features include:
 
 - [ ] Login With JWT based autheitcation
 
-- [ ] Login through Google
+- [x] Login through Google
 
 - [ ] Logiin Throguh Github
 
@@ -14,7 +14,7 @@ Features include:
 
 - [x] Sign Up with JWT based authentication
 
-- [ ] Sign up with Google
+- [x] Sign up with Google
 
 - [ ] Sign Up with Discord
 
