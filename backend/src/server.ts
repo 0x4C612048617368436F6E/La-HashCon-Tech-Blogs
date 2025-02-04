@@ -9,11 +9,23 @@ import signupRouter from '../routes/signupRoute'
 import logininRouter from '../routes/loginRoute';
 import cookieParser from 'cookie-parser'
 //import homeRoute from '../routes/homeRoute';
+import passport from 'passport';
+import configurePassportWithGoogleAuth from '../config/configurePassportWithGoogleAuth';
+import configureSessionAndPassport from '../config/configureSessionAndPassport';
+import authGoogleRoute from '../routes/authGoogleRoute';
 require('dotenv').config();
+import authGoogleCallbackRouteHandler from '../routes/authGoogleCallbackRoute'
 let app = express();
 let PORT:number | string = process.env.PORT || 5000; 
 
 databaseConnection();
+//do som configuration
+passport.use(configurePassportWithGoogleAuth);
+app.use(configureSessionAndPassport);
+
+//initialise passport
+app.use(passport.initialize());
+app.use(passport.session());
 
 //set up the middleware
 app.use(cors(corsOptionConfig));
@@ -26,6 +38,8 @@ app.use(logger.logMessage);
 app.use('/',homeRouter);
 app.use('/signup',signupRouter);
 app.use('/login',logininRouter);
+app.use('/auth/google',authGoogleRoute);
+app.use('/auth/google/callback',authGoogleCallbackRouteHandler);
 
 
 app.use(logger.logError);

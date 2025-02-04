@@ -297,9 +297,11 @@ const SignupPage = () =>{
                             <div className="p-2 rounded-full">
                                 <img src={Google} className='w-5'/>
                             </div>
+                            <a href='http://localhost:5000/auth/google/'>
                             <span className="ml-4">
                                 Sign Up with Google
                             </span>
+                            </a>
                         </button>
 
                         <button

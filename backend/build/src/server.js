@@ -14,10 +14,21 @@ const signupRoute_1 = __importDefault(require("../routes/signupRoute"));
 const loginRoute_1 = __importDefault(require("../routes/loginRoute"));
 const cookie_parser_1 = __importDefault(require("cookie-parser"));
 //import homeRoute from '../routes/homeRoute';
+const passport_1 = __importDefault(require("passport"));
+const configurePassportWithGoogleAuth_1 = __importDefault(require("../config/configurePassportWithGoogleAuth"));
+const configureSessionAndPassport_1 = __importDefault(require("../config/configureSessionAndPassport"));
+const authGoogleRoute_1 = __importDefault(require("../routes/authGoogleRoute"));
 require('dotenv').config();
+const authGoogleCallbackRoute_1 = __importDefault(require("../routes/authGoogleCallbackRoute"));
 let app = (0, express_1.default)();
 let PORT = process.env.PORT || 5000;
 (0, databaseConfig_1.default)();
+//do som configuration
+passport_1.default.use(configurePassportWithGoogleAuth_1.default);
+app.use(configureSessionAndPassport_1.default);
+//initialise passport
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
 //set up the middleware
 app.use((0, cors_1.default)(corsOptionConfig_1.default));
 app.use(express_1.default.urlencoded({ extended: false }));
@@ -28,6 +39,8 @@ app.use(logger.logMessage);
 app.use('/', homeRoute_1.default);
 app.use('/signup', signupRoute_1.default);
 app.use('/login', loginRoute_1.default);
+app.use('/auth/google', authGoogleRoute_1.default);
+app.use('/auth/google/callback', authGoogleCallbackRoute_1.default);
 app.use(logger.logError);
 //want to connect to database and then connect to server. If connection to databsae failes, no to concect to server
 mongoose_1.default.connection.on('connecting', () => {
@@ -59,3 +72,4 @@ mongoose_1.default.connection.on('disconnected', () => {
     logger.logDatabase("Database connection disconected");
     logger.logDatabase("Ready State " + mongoose_1.default.connection.readyState + "\n");
 });
+//Checking
