@@ -1,4 +1,3 @@
 node_modules
 Logger
 .env
-backend/.env
